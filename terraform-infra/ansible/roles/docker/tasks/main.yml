@@ -1,0 +1,30 @@
+---
+- name: Install Docker
+  ansible.builtin.dnf:
+    name: docker
+    state: present
+
+- name: Enable Docker
+  ansible.builtin.systemd:
+    name: docker
+    enabled: yes
+
+- name: Start Docker
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+
+- name: Add ec2-user to docker group
+  ansible.builtin.user:
+    name: ec2-user
+    groups: docker
+    append: yes
+
+- name: Verify Docker installation
+  ansible.builtin.command: docker --version
+  register: docker_version
+  changed_when: false
+
+- name: Display Docker version
+  ansible.builtin.debug:
+    var: docker_version.stdout

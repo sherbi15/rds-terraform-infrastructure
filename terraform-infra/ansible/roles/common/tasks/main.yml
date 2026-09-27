@@ -1,0 +1,16 @@
+---
+- name: Update all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Install common packages
+  ansible.builtin.dnf:
+    name:
+      - git
+      - unzip
+      - vim
+      - wget
+      - tar
+      - python3-pip
+    state: present

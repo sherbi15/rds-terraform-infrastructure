@@ -1,0 +1,27 @@
+---
+- name: Download Jenkins repo
+  get_url:
+    url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+
+- name: Import Jenkins GPG Key
+  rpm_key:
+    state: present
+    key: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+- name: Install Jenkins
+  dnf:
+    name: jenkins
+    state: present
+
+- name: Start Jenkins
+  service:
+    name: jenkins
+    state: started
+    enabled: yes
+
+- name: Wait for Jenkins to start
+  ansible.builtin.wait_for:
+    port: 8080
+    delay: 10
+    timeout: 120
